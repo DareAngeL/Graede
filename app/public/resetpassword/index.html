@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Password Reset</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="graede.ico" rel="shortcut icon" type="image/x-icon">
+<link href="wb.validation.css" rel="stylesheet">
+<link href="resetpassword.css" rel="stylesheet">
+<link href="index.css" rel="stylesheet">
+<script src="jquery-1.12.4.min.js"></script>
+<script src="wb.validation.min.js"></script>
+<script>
+$(document).ready(function()
+{
+   $("#pass1edit").validate(
+   {
+      required: true,
+      type: 'text',
+      length_min: '6',
+      length_max: '200',
+      match_id: 'pass2edit',
+      match_text: 'Password do not match',
+      color_text: '#FFFFFF',
+      color_hint: '#00FF00',
+      color_error: '#FF0000',
+      color_border: '#808080',
+      nohint: true,
+      font_family: 'Bookman Old Style',
+      font_size: '11px',
+      position: 'centerright',
+      offsetx: 0,
+      offsety: 0,
+      bubble_class: 'bubbleleft',
+      effect: 'fade',
+      error_text: 'Less than 6 characters is not valid'
+   });
+   $("#pass2edit").validate(
+   {
+      required: false,
+      type: 'text',
+      length_min: '6',
+      length_max: '200',
+      match_id: 'pass1edit',
+      match_text: 'Password do not match',
+      color_text: '#FFFFFF',
+      color_hint: '#00FF00',
+      color_error: '#FF0000',
+      color_border: '#808080',
+      nohint: true,
+      font_family: 'Bookman Old Style',
+      font_size: '11px',
+      position: 'centerright',
+      offsetx: 0,
+      offsety: 0,
+      bubble_class: 'bubbleleft',
+      effect: 'fade',
+      error_text: 'Less than 6 characters is not valid'
+   });
+});
+</script>
+<script src="index.js"></script>
+</head>
+<body>
+<div id="container">
+
+<div id="Layer1">
+<input type="password" id="pass1edit" name="passedit1" value="" autocomplete="off" autofocus spellcheck="false" placeholder="Enter new password...">
+<label for="pass1edit" id="Label1">New Password</label>
+<label for="pass2edit" id="Label2">Confirm New Password</label>
+<label for="" id="Label3">Reset Password</label>
+<input type="button" id="resetBtn" onclick="main._validate();return false;" name="" value="Change Password">
+<input type="password" id="pass2edit" name="passedit1" value="" autocomplete="off" autofocus spellcheck="false" placeholder="Re-enter new password...">
+<div id="wb_Image1">
+<img src="graede.ico" id="Image1" alt=""></div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,172 @@
+div#container
+{
+   width: 970px;
+   position: relative;
+   margin: 0 auto 0 auto;
+   text-align: left;
+}
+body
+{
+   background-color: #FFFFFF;
+   color: #000000;
+   font-family: Arial;
+   font-weight: normal;
+   font-size: 13px;
+   line-height: 1.1875;
+   margin: 0;
+   text-align: center;
+}
+a
+{
+   color: #0000FF;
+   text-decoration: underline;
+}
+a:visited
+{
+   color: #800080;
+}
+a:active
+{
+   color: #FF0000;
+}
+a:hover
+{
+   color: #0000FF;
+   text-decoration: underline;
+}
+input:focus, textarea:focus, select:focus
+{
+   outline: none;
+}
+#Layer1
+{
+   background-color: #F7F5FB;
+   background-image: none;
+   border: 1px solid #161C48;
+   border-radius: 5px;
+}
+#Label1
+{
+   border: 0px solid #CCCCCC;
+   border-radius: 4px;
+   background-color: transparent;
+   background-image: none;
+   color: #161C48;
+   font-family: "Bookman Old Style";
+   font-weight: normal;
+   font-style: normal;
+   font-size: 19px;
+   padding: 4px 4px 4px 4px;
+   margin: 0;
+   text-align: center;
+   vertical-align: top;
+}
+#Label2
+{
+   border: 0px solid #CCCCCC;
+   border-radius: 4px;
+   background-color: transparent;
+   background-image: none;
+   color: #161C48;
+   font-family: "Bookman Old Style";
+   font-weight: normal;
+   font-style: normal;
+   font-size: 11px;
+   padding: 4px 4px 4px 4px;
+   margin: 0;
+   text-align: center;
+   vertical-align: top;
+}
+#Label2
+{
+   position: absolute;
+   left: 318px;
+   top: 213px;
+   width: 327px;
+   height: 45px;
+   line-height: 45px;
+   z-index: 2;
+}
+#Layer1
+{
+   position: absolute;
+   text-align: left;
+   left: 288px;
+   top: 168px;
+   width: 393px;
+   height: 105px;
+   z-index: 0;
+}
+#Label1
+{
+   position: absolute;
+   left: 335px;
+   top: 183px;
+   width: 292px;
+   height: 45px;
+   line-height: 45px;
+   z-index: 1;
+}
+@media only screen and (max-width: 969px)
+{
+div#container
+{
+   width: 320px;
+}
+body
+{
+   background-color: #FFFFFF;
+   background-image: none;
+}
+#Layer1
+{
+   left: 18px;
+   top: 159px;
+   width: 283px;
+   height: 34px;
+   visibility: visible;
+   display: inline;
+}
+#Label1
+{
+   left: 18px;
+   top: 159px;
+   width: 277px;
+   height: 12px;
+   visibility: visible;
+   display: inline;
+   margin: 0;
+   padding: 4px 4px 4px 4px;
+   text-align: center;
+   font-size: 8px;
+   font-family: "Bookman Old Style";
+   font-weight: normal;
+   font-style: normal;
+   text-decoration: none;
+}
+#Label1
+{
+   line-height: 12px;
+}
+#Label2
+{
+   left: 18px;
+   top: 174px;
+   width: 277px;
+   height: 12px;
+   visibility: visible;
+   display: inline;
+   margin: 0;
+   padding: 4px 4px 4px 4px;
+   text-align: center;
+   font-size: 8px;
+   font-family: "Bookman Old Style";
+   font-weight: normal;
+   font-style: normal;
+   text-decoration: none;
+}
+#Label2
+{
+   line-height: 12px;
+}
+}
