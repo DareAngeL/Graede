@@ -8,6 +8,7 @@ import com.tajos.studio.MenuManager;
 import com.tajos.studio.MenuTxFieldGroup;
 import com.tajos.studio.WorkbookManager;
 import com.tajos.studio.action.StateManager;
+import com.tajos.studio.components.CloseButton;
 import com.tajos.studio.components.TajosMenuTextField;
 import com.tajos.studio.components.TajosTable;
 import com.tajos.studio.components.TajosTable.RowsAndColumnsCalculator;
@@ -37,6 +38,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -95,6 +97,7 @@ public class WorkBookActivity extends javax.swing.JFrame {
     private ComponentResizer mWindowResizer;
     
     public static int prevWindowState = Frame.NORMAL;
+    private String mWorkspaceID;
     
     public enum PublishType {
         ONE_SHEET, ONE_WORKBOOK, ALL_WORKBOOKS
@@ -107,6 +110,12 @@ public class WorkBookActivity extends javax.swing.JFrame {
         setCursor(Cursor.getDefaultCursor());
         initComponents();
         GradeUtils.centerFrame(this);
+        // maximized frame
+        final GraphicsEnvironment env =
+            GraphicsEnvironment.getLocalGraphicsEnvironment();
+            setMaximizedBounds(env.getMaximumWindowBounds());
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // end
         
         _initListeners();
         
@@ -286,6 +295,27 @@ public class WorkBookActivity extends javax.swing.JFrame {
             table.revalidate();
             table.repaint();
         };
+        
+        closeButton2.setOnCloseButtonClickedListener(new CloseButton.OnCloseButtonClickedListener() {
+            @Override
+            public void onCloseBtnClick() {
+                mMenuManager.hasUnsaved((hasUnsaved) -> {
+                    // on checking finished
+                    if (hasUnsaved) {
+                        int result = JOptionPane.showConfirmDialog(
+                            new JFrame(), "You have an unsaved table, are you sure to exit?",
+                            "Confirm", JOptionPane.WARNING_MESSAGE);
+                    
+                        if (result == JOptionPane.OK_OPTION)
+                            System.exit(0);
+                        
+                        return;
+                    }
+                    
+                    System.exit(0);
+                });
+            }
+        });
     }
     
     private void _initLogic() throws IOException {
@@ -419,7 +449,7 @@ public class WorkBookActivity extends javax.swing.JFrame {
             return;
         
         setCursor(Cursor.getDefaultCursor());
-        String workspaceId = DBManager.getInstance().getUserData().get("workspace_id").toString();
+        mWorkspaceID = DBManager.getInstance().getUserData().get("workspace_id").toString();
         userInfo = (JSONObject) DBManager.getInstance().getUserData().get("info");
         
         Object nameObj = userInfo.get("name");
@@ -427,7 +457,6 @@ public class WorkBookActivity extends javax.swing.JFrame {
         if (nameObj != null)
             userNameLbl.setText(nameObj.toString());
         userNameLbl.resizeWithPreferredSize();
-        workbookCode.setText(workbookIDTAG + workspaceId);
         
         // region: update the user's profile pic if there's any
         String profPicLink = userInfo.get("photo_url").toString();
@@ -739,7 +768,12 @@ public class WorkBookActivity extends javax.swing.JFrame {
         pasteOptionCell = new javax.swing.JMenu();
         pasteTextOnly = new javax.swing.JMenuItem();
         formulaPaste = new javax.swing.JMenuItem();
+        deleteOption = new javax.swing.JMenu();
         deleteCell = new javax.swing.JMenuItem();
+        shiftCellLeft = new javax.swing.JMenuItem();
+        shiftCellUp = new javax.swing.JMenuItem();
+        shiftColumnLeft = new javax.swing.JMenuItem();
+        shiftColumnUp = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator() {
             @Override
             public void paintComponent(Graphics g) {
@@ -861,9 +895,9 @@ public class WorkBookActivity extends javax.swing.JFrame {
         sheetTitleLbl = new com.tajos.studio.components.TajosJLabel();
         publishBtn = new com.tajos.studio.graphics.RoundedPanel();
         publishLbl = new com.tajos.studio.components.TajosJLabel();
-        workbookCode = new javax.swing.JTextPane();
         importBtn = new com.tajos.studio.graphics.RoundedPanel();
         importLbl = new com.tajos.studio.components.TajosJLabel();
+        shareCodeLbl = new javax.swing.JLabel();
 
         TxFieldMenuPopup.setBackground(new java.awt.Color(255, 255, 255));
         TxFieldMenuPopup.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(213, 204, 240), null));
@@ -933,14 +967,40 @@ public class WorkBookActivity extends javax.swing.JFrame {
 
         cellPopupMenu.add(pasteOptionCell);
 
+        deleteOption.setForeground(new java.awt.Color(22, 28, 72));
+        deleteOption.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/delete2.png"))); // NOI18N
+        deleteOption.setText("Delete");
+        deleteOption.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 12)); // NOI18N
+
         deleteCell.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_DELETE, 0));
         deleteCell.setBackground(new java.awt.Color(204, 0, 51));
         deleteCell.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 12)); // NOI18N
         deleteCell.setForeground(new java.awt.Color(22, 28, 72));
-        deleteCell.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/delete2.png"))); // NOI18N
-        deleteCell.setText("Delete");
+        deleteCell.setText("Delete Cell Content Only");
         deleteCell.setToolTipText("You cannot undo this operation");
-        cellPopupMenu.add(deleteCell);
+        deleteOption.add(deleteCell);
+
+        shiftCellLeft.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 12)); // NOI18N
+        shiftCellLeft.setForeground(new java.awt.Color(22, 28, 72));
+        shiftCellLeft.setText("Shift Cell Left");
+        deleteOption.add(shiftCellLeft);
+
+        shiftCellUp.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 12)); // NOI18N
+        shiftCellUp.setForeground(new java.awt.Color(22, 28, 72));
+        shiftCellUp.setText("Shift Cell Up");
+        deleteOption.add(shiftCellUp);
+
+        shiftColumnLeft.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 12)); // NOI18N
+        shiftColumnLeft.setForeground(new java.awt.Color(22, 28, 72));
+        shiftColumnLeft.setText("Shift Column Left");
+        deleteOption.add(shiftColumnLeft);
+
+        shiftColumnUp.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 12)); // NOI18N
+        shiftColumnUp.setForeground(new java.awt.Color(22, 28, 72));
+        shiftColumnUp.setText("Shift Row Up");
+        deleteOption.add(shiftColumnUp);
+
+        cellPopupMenu.add(deleteOption);
         cellPopupMenu.add(jSeparator2);
 
         shitCellDown.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 12)); // NOI18N
@@ -1048,7 +1108,7 @@ public class WorkBookActivity extends javax.swing.JFrame {
         root.setLayout(new javax.swing.OverlayLayout(root));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(22, 28, 72), 2));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(22, 28, 72), 1));
         jPanel2.setLayout(new com.tajos.studio.layoutmanagers.GravityLayout());
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/loading.gif"))); // NOI18N
@@ -1076,7 +1136,7 @@ public class WorkBookActivity extends javax.swing.JFrame {
         root.add(loadingPane);
 
         mainPanel.setBackground(new java.awt.Color(255, 255, 255));
-        mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(22, 28, 72), 2));
+        mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(22,28,72), 1));
         mainPanel.setVisible(false);
         mainPanel.setCornersRadius(new int[] {30, 30, 0, 0});
 
@@ -1538,7 +1598,7 @@ public class WorkBookActivity extends javax.swing.JFrame {
         tableRootPaneLayout.setVerticalGroup(
             tableRootPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tableRootPaneLayout.createSequentialGroup()
-                .addComponent(tableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                .addComponent(tableScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1576,27 +1636,6 @@ public class WorkBookActivity extends javax.swing.JFrame {
         publishLbl.setDefaultFont(10);
         publishBtn.add(publishLbl);
 
-        workbookCode.setEditable(false);
-        workbookCode.setBackground(new java.awt.Color(255, 255, 255));
-        workbookCode.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 10)); // NOI18N
-        workbookCode.setForeground(new java.awt.Color(22, 28, 72));
-        workbookCode.setText("Workspace Code:");
-        workbookCode.setToolTipText("Click to copy workspace code");
-        SimpleAttributeSet attribs = new SimpleAttributeSet();
-        StyleConstants.setAlignment(attribs, StyleConstants.ALIGN_RIGHT);
-        workbookCode.setParagraphAttributes(attribs, false);
-        workbookCode.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                workbookCodeMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                workbookCodeMouseExited(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                workbookCodeMousePressed(evt);
-            }
-        });
-
         importBtn.setBackground(new java.awt.Color(247, 245, 251));
         importBtn.setToolTipText("Import Excel Workbook");
         importBtn.setRadius(10);
@@ -1618,14 +1657,32 @@ public class WorkBookActivity extends javax.swing.JFrame {
         importLbl.setDefaultFont(10);
         importBtn.add(importLbl);
 
+        shareCodeLbl.setFont(new java.awt.Font("Nirmala UI Semilight", 0, 10)); // NOI18N
+        shareCodeLbl.setForeground(new java.awt.Color(22, 28, 72));
+        shareCodeLbl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/send.png"))); // NOI18N
+        shareCodeLbl.setText("Share worskpace: Invite students");
+        shareCodeLbl.setToolTipText("Click to copy workspace code");
+        shareCodeLbl.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+        shareCodeLbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                shareCodeLblMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                shareCodeLblMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                shareCodeLblMousePressed(evt);
+            }
+        });
+
         workbkRootPane.setLayer(ribbonPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         workbkRootPane.setLayer(saveBtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
         workbkRootPane.setLayer(menuRootPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         workbkRootPane.setLayer(tableRootPane, javax.swing.JLayeredPane.DEFAULT_LAYER);
         workbkRootPane.setLayer(sheetTitlePanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         workbkRootPane.setLayer(publishBtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        workbkRootPane.setLayer(workbookCode, javax.swing.JLayeredPane.DEFAULT_LAYER);
         workbkRootPane.setLayer(importBtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        workbkRootPane.setLayer(shareCodeLbl, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout workbkRootPaneLayout = new javax.swing.GroupLayout(workbkRootPane);
         workbkRootPane.setLayout(workbkRootPaneLayout);
@@ -1634,9 +1691,9 @@ public class WorkBookActivity extends javax.swing.JFrame {
             .addGroup(workbkRootPaneLayout.createSequentialGroup()
                 .addComponent(menuRootPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addGroup(workbkRootPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tableRootPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, workbkRootPaneLayout.createSequentialGroup()
+                .addGroup(workbkRootPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tableRootPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(workbkRootPaneLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(ribbonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(93, 93, 93)
@@ -1649,9 +1706,9 @@ public class WorkBookActivity extends javax.swing.JFrame {
                     .addGroup(workbkRootPaneLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(sheetTitlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 495, Short.MAX_VALUE)
-                        .addComponent(workbookCode, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(shareCodeLbl)
+                        .addGap(15, 15, 15))))
         );
         workbkRootPaneLayout.setVerticalGroup(
             workbkRootPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1669,7 +1726,7 @@ public class WorkBookActivity extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(workbkRootPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(sheetTitlePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(workbookCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(shareCodeLbl))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tableRootPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1980,10 +2037,10 @@ public class WorkBookActivity extends javax.swing.JFrame {
     }//GEN-LAST:event_publishBtnMousePressed
 
     private void publishOnlySheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_publishOnlySheetActionPerformed
-        if (!table.getInvoker().isSaved()) {
-            JOptionPane.showMessageDialog(new JFrame(), "Oops! You need to save this table first before publishing.");
+        if (table.isDisable() || table.isEditing())
             return;
-        }
+        
+        save();
         
         try {
             _publish(PublishType.ONE_SHEET);
@@ -1993,10 +2050,10 @@ public class WorkBookActivity extends javax.swing.JFrame {
     }//GEN-LAST:event_publishOnlySheetActionPerformed
 
     private void publishThisWorkbookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_publishThisWorkbookActionPerformed
-        if (!table.getInvoker().isSaved()) {
-            JOptionPane.showMessageDialog(new JFrame(), "Oops! You need to save this table first before publishing.");
+        if (table.isDisable() || table.isEditing())
             return;
-        }
+        
+        save();
         
         try {
             _publish(PublishType.ONE_WORKBOOK);
@@ -2006,10 +2063,10 @@ public class WorkBookActivity extends javax.swing.JFrame {
     }//GEN-LAST:event_publishThisWorkbookActionPerformed
 
     private void publishAllWorkbooksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_publishAllWorkbooksActionPerformed
-        if (!table.getInvoker().isSaved()) {
-            JOptionPane.showMessageDialog(new JFrame(), "Oops! You need to save this table first before publishing.");
+        if (table.isDisable() || table.isEditing())
             return;
-        }
+        
+        save();
         
         try {
             _publish(PublishType.ALL_WORKBOOKS);
@@ -2029,24 +2086,6 @@ public class WorkBookActivity extends javax.swing.JFrame {
         };
         timer.schedule(task, 50);
     }//GEN-LAST:event_formWindowStateChanged
-
-    private void workbookCodeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_workbookCodeMousePressed
-        String workbkCode = workbookCode.getText().split(":")[1];
-        StringSelection stringSelection = new StringSelection(workbkCode);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, null);
-        
-        notificationPopup = new NotificationPopup("Workspace Code Copied!");
-        notificationPopup.show(this);
-    }//GEN-LAST:event_workbookCodeMousePressed
-
-    private void workbookCodeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_workbookCodeMouseEntered
-        setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }//GEN-LAST:event_workbookCodeMouseEntered
-
-    private void workbookCodeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_workbookCodeMouseExited
-        setCursor(Cursor.getDefaultCursor());
-    }//GEN-LAST:event_workbookCodeMouseExited
 
     private void importBtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_importBtnMouseEntered
         if (table.isDisable() || table.isEditing())
@@ -2179,6 +2218,27 @@ public class WorkBookActivity extends javax.swing.JFrame {
     private void averageMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_averageMousePressed
         _addSpecialOperator("AVERAGE()");
     }//GEN-LAST:event_averageMousePressed
+
+    private void shareCodeLblMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_shareCodeLblMousePressed
+        String code = "You can view your grades on this workspace:\n"
+                        + mWorkspaceID + "\n\n"
+                        + "Paste this code in the Graede Viewer Application";
+        
+        StringSelection stringSelection = new StringSelection(code);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
+        
+        notificationPopup = new NotificationPopup("Copying Success!");
+        notificationPopup.show(this);
+    }//GEN-LAST:event_shareCodeLblMousePressed
+
+    private void shareCodeLblMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_shareCodeLblMouseEntered
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_shareCodeLblMouseEntered
+
+    private void shareCodeLblMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_shareCodeLblMouseExited
+        setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_shareCodeLblMouseExited
     
     private void _addSpecialOperator(String op) {
         if (table.isDisable())
@@ -2275,6 +2335,7 @@ public class WorkBookActivity extends javax.swing.JFrame {
     private javax.swing.JMenuItem cutCell;
     private javax.swing.JMenuItem deleteCell;
     private javax.swing.JMenuItem deleteItem;
+    private javax.swing.JMenu deleteOption;
     private com.tajos.studio.components.ImageViewer fill;
     private com.tajos.studio.graphics.RoundedPanel fillOpenColor;
     private com.tajos.studio.graphics.RoundedPanel fillPanel;
@@ -2322,10 +2383,15 @@ public class WorkBookActivity extends javax.swing.JFrame {
     private com.tajos.studio.components.TajosJLabel saveLbl;
     private javax.swing.JPopupMenu.Separator sep1;
     private javax.swing.JPopupMenu.Separator sep2;
+    private javax.swing.JLabel shareCodeLbl;
     private com.tajos.studio.components.TajosJLabel sheetTitleLbl;
     private javax.swing.JPanel sheetTitlePanel;
+    private javax.swing.JMenuItem shiftCellLeft;
     private javax.swing.JMenuItem shiftCellRight;
+    private javax.swing.JMenuItem shiftCellUp;
     private javax.swing.JMenuItem shiftColRight;
+    private javax.swing.JMenuItem shiftColumnLeft;
+    private javax.swing.JMenuItem shiftColumnUp;
     private javax.swing.JMenuItem shiftRowDown;
     private javax.swing.JMenuItem shitCellDown;
     private com.tajos.studio.graphics.RoundedPanel subToolbar;
@@ -2340,7 +2406,6 @@ public class WorkBookActivity extends javax.swing.JFrame {
     private com.tajos.studio.components.ImageViewer userProfImg;
     private javax.swing.JPanel userProfilePanel;
     private javax.swing.JDesktopPane workbkRootPane;
-    private javax.swing.JTextPane workbookCode;
     private com.tajos.studio.components.TajosJLabel wrkbkLabel;
     private javax.swing.JSeparator wrkbookSeparator;
     // End of variables declaration//GEN-END:variables

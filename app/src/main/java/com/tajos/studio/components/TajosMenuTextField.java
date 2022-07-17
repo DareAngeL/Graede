@@ -310,6 +310,7 @@ public class TajosMenuTextField extends JTextField implements Margins, MenuTxFie
                             "Confirm", JOptionPane.WARNING_MESSAGE);
                     
                     if (result == JOptionPane.OK_OPTION) {
+                        WorkbookManager.instance().updateSaveState(true);
                         if (getType() != TxtFieldType.WORKBOOK)
                             WorkbookManager.instance().openTable(TajosMenuTextField.this);
                         
@@ -338,11 +339,13 @@ public class TajosMenuTextField extends JTextField implements Margins, MenuTxFie
             // else if the texfield type is SHEET // ==> This is for Adding new SHEET
             } else {
                 TajosMenuTextField thisTx = (TajosMenuTextField) mGroup.getSelection();
-                if (thisTx != null && !thisTx.isSaved() && TajosTable.instance().isInitialized()) {
+                
+                if (thisTx != null && !thisTx.isSaved()/* && TajosTable.instance().isInitialized()*/) {
                     int result = JOptionPane.showConfirmDialog(new JFrame(), thisTx.getText() + " is not yet saved, do you wish to continue?", 
                             "Confirm", JOptionPane.WARNING_MESSAGE);
                     
                     if (result == JOptionPane.OK_OPTION) {
+                        WorkbookManager.instance().updateSaveState(true);
                         _addNewSheet();
                         
                         WorkbookManager.instance().blankTable(TajosMenuTextField.this);
@@ -555,8 +558,6 @@ public class TajosMenuTextField extends JTextField implements Margins, MenuTxFie
     public Map<Integer, Map<Integer, CellTextStyle>> getCellStylesData() {
         return mCellStyles;
     }
-    
-    
 
     @Override
     protected void paintComponent(Graphics g) {

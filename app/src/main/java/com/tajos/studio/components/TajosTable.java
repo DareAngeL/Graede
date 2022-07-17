@@ -368,7 +368,7 @@ public class TajosTable extends JTable implements KeyBinds {
         
         if (e instanceof KeyEvent && 
             (CTRL_Z((KeyEvent)e) || CTRL_Y((KeyEvent)e) ||
-            CTRL_S((KeyEvent)e))) 
+            CTRL_S((KeyEvent)e) || DELETE((KeyEvent)e))) 
         {
             return false;
         }
@@ -563,9 +563,6 @@ public class TajosTable extends JTable implements KeyBinds {
                         case "Cut" -> {
                             _cut();
                         }
-                        case "Delete" -> {
-                            _delete();
-                        }
                         case "Shift Cell Down" -> {
                             mTablePopupMenuManager.shiftCellDown();
                         }
@@ -595,6 +592,21 @@ public class TajosTable extends JTable implements KeyBinds {
                             }
                             case "Formulas" -> {
                                 _paste(true);
+                            }
+                            case "Delete Cell Content Only" -> {
+                                _deleteContent();
+                            }
+                            case "Shift Cell Left" -> {
+                                mTablePopupMenuManager.shiftCellLeft();
+                            }
+                            case "Shift Cell Up" -> {
+                                mTablePopupMenuManager.shiftCellUp();
+                            }
+                            case "Shift Column Left" -> {
+                                mTablePopupMenuManager.shiftEntireColumnLeft();
+                            }
+                            case "Shift Row Up" -> {
+                                mTablePopupMenuManager.shiftEntireRowUp();
                             }
                         }
                     });
@@ -701,7 +713,7 @@ public class TajosTable extends JTable implements KeyBinds {
             if (_isOnFilterMode())
                 return;
             
-            _delete();
+            _deleteContent();
             return;
         }
         
@@ -875,6 +887,10 @@ public class TajosTable extends JTable implements KeyBinds {
             if (!CTRL_DOWN(e))
                 _triggerCellSelection(mSelectedRowPHolder, mSelectedColPholder);
         }
+        
+        if (CTRL_SHIFT_DOWN(e) && ARROW_DOWN(e)) {
+            setRowSelectionInterval(getSelectedRow(), getMaxOccupiedCells()[0]-2);
+        }
     }
     
     private boolean _cellHasError() {
@@ -909,12 +925,12 @@ public class TajosTable extends JTable implements KeyBinds {
     
     public void removeLastColumn() {
         TableModel model = (TableModel) getModel();
-        model.removeColumn(model.getColumnCount()-1);
+        model.removeColumnContent(model.getColumnCount()-1);
     }
     
     public void removeLastRow() {
         TableModel model = (TableModel) getModel();
-        model.removeRow(model.getRowCount()-1);
+        model.removeRowContent(model.getRowCount()-1);
     }
     public void _saveState(String TAG, int max, int[] _rows, int [] _cols) {
         int[] rows = _rows == null ? getSelectedRows() : _rows;
@@ -1107,13 +1123,13 @@ public class TajosTable extends JTable implements KeyBinds {
                 _getRowsToSave(), 
                 _getColsToSave());
         
-        _delete();
+        _deleteContent();
     }
     
     /**
      * Delete cell content.
      */
-    private void _delete() {
+    private void _deleteContent() {
         _saveState("", -1, _getRowsToSave(), _getColsToSave());
         TableModel model = (TableModel) getModel();
         for (int row : getSelectedRows()) {
@@ -1362,6 +1378,28 @@ public class TajosTable extends JTable implements KeyBinds {
             }
         }
         
+        public void shiftCellUp() {
+            mTable._saveState("", -1, mTable._getRowsToSave(), mTable._getColsToSave());
+            
+            for (int row : mRow) {
+                for (int col : mCol) {
+                    if ((row == 0 && col == 0) ||
+                        (row == 0 && col == 1))
+                        continue;
+                    
+                    mModel.shiftCellUp(mRow[0], col);
+                }
+            }
+        }
+        
+        public void shiftEntireRowUp() {
+            mTable._saveState("", -1, mTable._getRowsToSave(), mTable._getColsToSave());
+            
+            for (int row : mRow) {
+                mModel.shiftRowUp(mRow[0], -1);
+            }
+        }
+        
         public void shiftCellRight() {
             saveStateShiftRight(mRow);
             for (int row : mRow) {
@@ -1371,6 +1409,30 @@ public class TajosTable extends JTable implements KeyBinds {
                         continue;
                     
                     mModel.shiftCellRight(row, col);
+                }
+            }
+        }
+        
+        public void shiftCellLeft() {
+            mTable._saveState("", -1, mTable._getRowsToSave(), mTable._getColsToSave());
+            
+            for (int row : mRow) {
+                for (int col : mCol) {
+                    if ((row == 0 && col == 0) ||
+                        (row == 0 && col == 1))
+                        continue;
+                    
+                    mModel.shiftCellLeft(row, mCol[0]);
+                }
+            }
+        }
+        
+        public void shiftEntireColumnLeft() {
+            mTable._saveState("", -1, mTable._getRowsToSave(), mTable._getColsToSave());
+            
+            for (int row : mRow) {
+                for (int col : mCol) {
+                    mModel.shiftColumnLeft(row, mCol[0]);
                 }
             }
         }

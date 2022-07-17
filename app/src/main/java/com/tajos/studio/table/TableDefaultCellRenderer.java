@@ -91,7 +91,7 @@ public class TableDefaultCellRenderer extends JTextPane implements TableCellRend
         if (mCellStyles == null || mCellStyles.get(_row) == null)
             return;
         
-        if (!mCellStyles.get(_row).isEmpty()) {
+        if (!mCellStyles.get(_row).isEmpty() && _col != -1) {
             mCellStyles.get(_row).remove(_col);
             return;
         }

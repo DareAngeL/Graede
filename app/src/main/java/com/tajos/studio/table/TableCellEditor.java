@@ -386,7 +386,6 @@ public class TableCellEditor extends DefaultCellEditor {
         
         boolean stop = super.stopCellEditing();
         resetEditor();
-        GradeUtils.log("stop");
         return stop;
     }
     

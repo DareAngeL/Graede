@@ -194,7 +194,7 @@ public class TableModel extends AbstractTableModel {
         _insertColumn("ADD", -1);
     }
     
-    public void removeColumn(int column) {
+    public void removeColumnContent(int column) {
         --mCols;
         for (int row=0; row<getRowCount(); row++) {
             if (column >= mData.get(row).size())
@@ -206,12 +206,33 @@ public class TableModel extends AbstractTableModel {
         TableColumn tableColumn = mTable.getColumnModel().getColumn(column);
         mTable.removeColumn(tableColumn);
         columnListener.OnColumnRemoved();
-//        fireTableDataChanged();
     }
 
-    public void removeRow(int row) {
+    public void removeRowContent(int row) {
         mData.remove(row);
         fireTableRowsDeleted(row, row);
+    }
+    
+    public void shiftCellLeft(int row, int _column) {
+        int max = getMaxOccupiedCellCol() == 1 ? mTable.getColumnCount() :
+                getMaxOccupiedCellCol();
+        
+        _delete("COL", _column, row, max);
+    }
+    
+    public void shiftColumnLeft(int row, int column) {
+        _deleteColumn(row, column);
+    }
+    
+    public void shiftCellUp(int delCount, int column) {
+        int max = getMaxOccupiedCellRow() == 1 ? mTable.getRowCount() :
+                getMaxOccupiedCellRow();
+        
+        _delete("ROW", delCount, column, max);
+    }
+    
+    public void shiftRowUp(int row, int col) {
+        _deleteRow(row, col);
     }
     
     /**
@@ -392,10 +413,11 @@ public class TableModel extends AbstractTableModel {
         }
         // region end
         
-        final List<Object> rowData = mData.get(rowIndex);
-        if (columnIndex >= mData.get(rowIndex).size())
-            rowData.add(value);
-        else
+        List<Object> rowData = mData.get(rowIndex);
+        if (columnIndex >= rowData.size()) {
+            rowData = _fixTableData(rowData, columnIndex+1 - rowData.size());
+            rowData.set(columnIndex, value);
+        } else
             rowData.set(columnIndex, value);
         
         mData.set(rowIndex, rowData);
@@ -445,6 +467,13 @@ public class TableModel extends AbstractTableModel {
         return obj;
     }
     
+    private List<Object> _fixTableData(final List<Object> rowData, final int diff) {
+        for (int i=0; i<diff; i++)
+            rowData.add(null);
+        
+        return rowData;
+    }
+    
     /**
      * Updates the occupied cells
      * @param value
@@ -454,7 +483,7 @@ public class TableModel extends AbstractTableModel {
     private void _updateOccupiedCells(Object value, int rowIndex, int columnIndex) {
         
         if (value != null && !value.equals("")) 
-        {    
+        {
             mOccupiedCells.add(new OccupiedCells(rowIndex, columnIndex));
             int[] maxOccupiedCell = OccupiedCells.Manager.getMaxOccupiedCell(mOccupiedCells);
             mTable.setMaxOccupiedCells(maxOccupiedCell);
@@ -556,6 +585,55 @@ public class TableModel extends AbstractTableModel {
             
             cellData = i == _max-1 ? cellData : prevCellData;
         }
+    }
+    
+    /**
+     * A method that will handle all the deletion of the cells, either from the column or from the row
+     */
+    private void _delete(String TAG, int toShift, int b, int max) {
+        for (int i=toShift; i<max; i++) {
+            Object value = TAG.equals("COL") ? getValueAt(b, i+1) : getValueAt(i+1, b);
+            
+            if (TAG.equals("ROW")) {
+                if (i == max-1) {
+                    setValueAt(null, i, b);
+                    continue;
+                }
+                
+                final TableCellData cellData = _getCellData(TAG, value, i+1, b);
+                setValueAt(value, i, b);
+                mTable.getRenderer().putCellStyles(i, b, cellData.getCellTextStyle());
+                TableDefaultCellRenderer.removeCellStyle(i+1, b);
+            } else {
+                if (i == max-1) {
+                    setValueAt(null, b, i);
+                    continue;
+                }
+                
+                final TableCellData cellData = _getCellData(TAG, value, b, i+1);
+                setValueAt(value, b, i);
+                mTable.getRenderer().putCellStyles(b, i, cellData.getCellTextStyle());
+                TableDefaultCellRenderer.removeCellStyle(b, i+1);
+            }
+        }
+    }
+    
+    private void _deleteRow(int row, int col) {
+        mData.remove(row);
+        TableDefaultCellRenderer.removeCellStyle(row, col);
+        fireTableRowsDeleted(row, row);
+    }
+    
+    private void _deleteColumn(int row, int col) {
+        for (int i=0; i<mData.size(); i++) {
+            if (i == 0 && (col == 0 || col == 1))
+                continue;
+            
+            mData.get(i).remove(col);
+            TableDefaultCellRenderer.removeCellStyle(i, col);
+        }
+        
+        fireTableDataChanged();
     }
     
     private void _shiftSelectedAllColToRight(int _col) {

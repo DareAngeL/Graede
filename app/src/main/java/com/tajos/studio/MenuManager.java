@@ -22,10 +22,14 @@ import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -88,6 +92,10 @@ public class MenuManager implements KeyBinds {
     public interface SheetTxFieldListener {
         void onEnterKeyPressed();
         void onFocusLost();
+    }
+    
+    public interface OnCheckingUnsavedListener {
+        void onCheckingFinished(boolean hasUnsaved);
     }
     
     @Override
@@ -399,6 +407,34 @@ public class MenuManager implements KeyBinds {
     
     public MenuTxFieldGroup getWorkbookGroup() {
         return mWorkbookGroup;
+    }
+    
+    public void hasUnsaved(OnCheckingUnsavedListener listener) {
+        new SwingWorker() {
+            @Override
+            protected Boolean doInBackground() throws Exception {
+                for (Component sheet : mSheetGroup.getElements()) {
+                    final TajosMenuTextField sheetTx = (TajosMenuTextField) sheet;
+
+                    if (!sheetTx.isSaved() && !sheetTx.getText().equals(SHEET_STR)) {
+                        GradeUtils.log(sheetTx.getText());
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    boolean b = (Boolean) get();
+                    listener.onCheckingFinished(b);
+                } catch (InterruptedException | ExecutionException ex) {
+                    GradeUtils.showErrorDialog(ex.getMessage(), "Something went wrong");
+                }
+            }
+        }.execute();
     }
     
     public Color getDefaultForegroundColor() {

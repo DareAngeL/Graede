@@ -189,17 +189,8 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <MenuItem class="javax.swing.JMenuItem" name="deleteCell">
+        <Menu class="javax.swing.JMenu" name="deleteOption">
           <Properties>
-            <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-              <KeyStroke key="DELETE"/>
-            </Property>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="33" green="0" red="cc" type="rgb"/>
-            </Property>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Nirmala UI Semilight" size="12" style="0"/>
-            </Property>
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="48" green="1c" red="16" type="rgb"/>
             </Property>
@@ -207,9 +198,75 @@
               <Image iconType="3" name="/icons/delete2.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Delete"/>
-            <Property name="toolTipText" type="java.lang.String" value="You cannot undo this operation"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Nirmala UI Semilight" size="12" style="0"/>
+            </Property>
           </Properties>
-        </MenuItem>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="deleteCell">
+              <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="DELETE"/>
+                </Property>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="33" green="0" red="cc" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Nirmala UI Semilight" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="48" green="1c" red="16" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Delete Cell Content Only"/>
+                <Property name="toolTipText" type="java.lang.String" value="You cannot undo this operation"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="shiftCellLeft">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Nirmala UI Semilight" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="48" green="1c" red="16" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Shift Cell Left"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="shiftCellUp">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Nirmala UI Semilight" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="48" green="1c" red="16" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Shift Cell Up"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="shiftColumnLeft">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Nirmala UI Semilight" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="48" green="1c" red="16" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Shift Column Left"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="shiftColumnUp">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Nirmala UI Semilight" size="12" style="0"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="48" green="1c" red="16" type="rgb"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Shift Row Up"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Component class="javax.swing.JPopupMenu$Separator" name="jSeparator2">
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JPopupMenu.Separator() {&#xa;    @Override&#xa;    public void paintComponent(Graphics g) {&#xa;        g.setColor(new Color(227,219,242));&#xa;        g.fillRect(15, getHeight()/2, getWidth()-15, 1);&#xa;    }&#xa;}"/>
@@ -458,12 +515,8 @@
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
-                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                    <LineBorder thickness="2">
-                      <Color PropertyName="color" blue="48" green="1c" red="16" type="rgb"/>
-                    </LineBorder>
-                  </Border>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="javax.swing.BorderFactory.createLineBorder(new java.awt.Color(22, 28, 72), 1)" type="code"/>
                 </Property>
               </Properties>
               <SubComponents>
@@ -517,12 +570,8 @@
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor" postCode="mainPanel.setVisible(false);">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder thickness="2">
-                  <Color PropertyName="color" blue="48" green="1c" red="16" type="rgb"/>
-                </LineBorder>
-              </Border>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.RADConnectionPropertyEditor" postCode="mainPanel.setVisible(false);">
+              <Connection code="javax.swing.BorderFactory.createLineBorder(new java.awt.Color(22,28,72), 1)" type="code"/>
             </Property>
             <Property name="cornersRadius" type="[I" editor="org.netbeans.modules.form.editors.PrimitiveTypeArrayEditor">
               <PropertyValue value="[30, 30, 0, 0]"/>
@@ -785,8 +834,8 @@
                           <Group type="102" attributes="0">
                               <Component id="menuRootPanel" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="tableRootPane" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="tableRootPane" alignment="0" max="32767" attributes="0"/>
                                   <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       <Component id="ribbonPanel" min="-2" pref="450" max="-2" attributes="0"/>
@@ -798,12 +847,12 @@
                                       <Component id="saveBtn" min="-2" pref="87" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="102" alignment="0" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
                                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                       <Component id="sheetTitlePanel" min="-2" pref="102" max="-2" attributes="0"/>
-                                      <EmptySpace pref="495" max="32767" attributes="0"/>
-                                      <Component id="workbookCode" min="-2" pref="337" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="shareCodeLbl" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -828,7 +877,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="sheetTitlePanel" min="-2" max="-2" attributes="0"/>
-                                  <Component id="workbookCode" min="-2" max="-2" attributes="0"/>
+                                  <Component id="shareCodeLbl" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="tableRootPane" max="32767" attributes="0"/>
@@ -1749,7 +1798,7 @@
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Component id="tableScrollPane" pref="568" max="32767" attributes="0"/>
+                                  <Component id="tableScrollPane" pref="448" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -1929,30 +1978,6 @@
                         </CodeStatement>
                       </LayoutCode>
                     </Container>
-                    <Component class="javax.swing.JTextPane" name="workbookCode">
-                      <Properties>
-                        <Property name="editable" type="boolean" value="false"/>
-                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                        </Property>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Nirmala UI Semilight" size="10" style="0"/>
-                        </Property>
-                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                          <Color blue="48" green="1c" red="16" type="rgb"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Workspace Code:"/>
-                        <Property name="toolTipText" type="java.lang.String" value="Click to copy workspace code"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="workbookCodeMouseEntered"/>
-                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="workbookCodeMouseExited"/>
-                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="workbookCodeMousePressed"/>
-                      </Events>
-                      <AuxValues>
-                        <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="SimpleAttributeSet attribs = new SimpleAttributeSet();&#xa;StyleConstants.setAlignment(attribs, StyleConstants.ALIGN_RIGHT);&#xa;workbookCode.setParagraphAttributes(attribs, false);"/>
-                      </AuxValues>
-                    </Component>
                     <Container class="com.tajos.studio.graphics.RoundedPanel" name="importBtn">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -2002,6 +2027,27 @@
                         </CodeStatement>
                       </LayoutCode>
                     </Container>
+                    <Component class="javax.swing.JLabel" name="shareCodeLbl">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Nirmala UI Semilight" size="10" style="0"/>
+                        </Property>
+                        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="48" green="1c" red="16" type="rgb"/>
+                        </Property>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/icons/send.png"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Share worskpace: Invite students"/>
+                        <Property name="toolTipText" type="java.lang.String" value="Click to copy workspace code"/>
+                        <Property name="horizontalTextPosition" type="int" value="10"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="shareCodeLblMouseEntered"/>
+                        <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="shareCodeLblMouseExited"/>
+                        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="shareCodeLblMousePressed"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
               </SubComponents>

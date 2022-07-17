@@ -99,7 +99,7 @@ public class GoogleProvider {
             if (access_token.isEmpty()) {
                 
                 return;
-            }   
+            }
             
             String params = "token=" + access_token;
             URL url = new URL("https://oauth2.googleapis.com/revoke");
@@ -122,7 +122,7 @@ public class GoogleProvider {
         Properties p=new Properties();  
         p.load(reader);
         
-        return p.get("access_token").toString();
+        return p.get("refresh_token").toString();
     }
 
     private static class THttpHandler implements HttpHandler {

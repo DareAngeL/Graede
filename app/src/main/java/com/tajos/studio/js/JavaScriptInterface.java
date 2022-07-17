@@ -27,6 +27,7 @@ public class JavaScriptInterface {
     
     public static final String name = "GradeAppJava";
     private final List<JavascriptInterfaceListener> listeners = new ArrayList<>();
+    private String mProvider;
     
     public JavaScriptInterface() {}
 
@@ -137,6 +138,7 @@ public class JavaScriptInterface {
     }
     
     public void isSignedIn(String provider) {
+        mProvider = provider;
         JFrame authActivityInstance = SignupActivity.getInstance();
         if (authActivityInstance != null && authActivityInstance.isVisible()) {
             authActivityInstance.setVisible(false);
@@ -179,5 +181,9 @@ public class JavaScriptInterface {
         if (provider.equals("google.com")) {
             GoogleProvider.getInstance().signOutGoogle();
         }
+    }
+
+    public String getProvider() {
+        return mProvider;
     }
 }
