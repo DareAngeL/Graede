@@ -16,7 +16,7 @@ easier, and more productive.
 I also provide a grade viewer for students where they can 
 view their grades anytime and anywhere using their smartphones.
 
-##
+## What
 Graede has a table where teachers can put the grades of their students 
 ranging from quizzes to semester grades, allowing them to put any type of grades.
 Teachers can also import excel data, calculate their students grade and publish 
