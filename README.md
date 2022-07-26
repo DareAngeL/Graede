@@ -1,5 +1,4 @@
 # Graede
-![](https://img.shields.io/badge/Status-Building-red)
 <!-- <a href="">![](https://img.shields.io/badge/publish-passing-yellow) -->
 <a href="https://www.apache.org/licenses/LICENSE-2.0">![](https://img.shields.io/github/license/DareAngeL/Graede)</a>
 <a href="https://www.oracle.com/java/technologies/downloads/#:~:text=Java%20SE%20Development%20Kit%2017.0.3.1%20downloads&text=(JDK%E2%84%A2).-,The%20JDK%20is%20a%20development%20environment%20for%20building%20applications%20and,Linux">![](https://img.shields.io/badge/JDK-v.17-orange)</a>
@@ -43,7 +42,7 @@ This also uses the JavaFX technology for web embedding.
 ![](https://img.shields.io/badge/-HTML-yellow)
 ![](https://img.shields.io/badge/-CSS-orange)
 
-## GUIs (Desktop)
+## UI (Desktop)
 ![design1](https://user-images.githubusercontent.com/45682972/178481030-ebaad8e0-8cfa-4841-9485-e993d1b0eb38.png)
 ![design2](https://user-images.githubusercontent.com/45682972/178497396-bc33e028-641d-4abb-800a-9c4e542136a2.png)
 ![design3](https://user-images.githubusercontent.com/45682972/178497529-f2286ece-7d80-40ce-8a46-d3071d82e04b.png)
