@@ -13,7 +13,7 @@ My goal is to provide teachers a service that will make sending
 grades to students hassle-free which will make their school life 
 easier, and more productive.
 
-I also provide a grade viewer for students where they can 
+I also provide a [Grade Viewer](https://github.com/DareAngeL/Graede-Viewer) for students where they can 
 view their grades anytime and anywhere using their smartphones.
 
 ## What
