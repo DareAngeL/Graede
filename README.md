@@ -5,6 +5,13 @@
 <a href="https://en.wikipedia.org/wiki/Swing_(Java)">![](https://img.shields.io/badge/Technology-Java%20Swing-blueviolet)</a>
 <a href="https://gluonhq.com/products/javafx/">![](https://img.shields.io/badge/Web%20Embed-JavaFX%20Technology-blue)</a>
 
+## Note
+> This repository is an archive of a thesis project completed for Imus Computer College. The development of this project is not actively continued as it was solely intended for academic purposes. However, feel free to explore the codebase to gain insights into the project.
+
+> Please note that this repository may not receive updates or maintenance. Therefore, any issues or pull requests submitted might not be addressed promptly, if at all.
+
+> Thank you for your interest in this thesis project!
+
 ## About
 Graede brings all of your student grades in one place, making them
 instantly searchable and accessible from anywhere.
